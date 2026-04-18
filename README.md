@@ -2,7 +2,13 @@
 
 # 🔍 GitScope — AI Copilot for Evaluating GitHub Repositories
 
-![Demo](assets/demo.png)
+## 📸 Demo
+
+### Input Interface
+![Input](assets/demo-input.png)
+
+### Output (Decision Insights)
+![Output](assets/demo-output.png)
 
 ## 🧩 Problem
 
