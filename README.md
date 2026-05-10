@@ -1,103 +1,91 @@
-# 🚀 GitScope
+# GitScope
 
-# 🔍 GitScope — AI Copilot for Evaluating GitHub Repositories
+An MCP-powered AI agent that analyzes GitHub repositories and surfaces structured insights — built to help product managers and founders make faster, evidence-based decisions about repos they don't have time to read.
 
-## 📸 Demo
+---
 
-### Input Interface
-![Input](assets/demo-input.png)
+## Problem & Why
 
-### Output (Decision Insights)
-![Output](assets/demo-output.png)
+When evaluating a new library, vendor repo, or open-source dependency, PMs and founders typically spend 20–30 minutes manually scanning commits, issues, and PRs — and still miss key signals like maintenance gaps, bus factor risk, or stale PRs.
 
-## 🧩 Problem
+GitScope automates that scan and returns a structured decision brief in under a minute.
 
-Understanding a GitHub repository is slow and fragmented.
+---
 
-Product managers, founders, and developers often struggle to:
-- assess repository quality
-- understand activity and risks
-- decide whether to adopt or contribute
+## What This Is
 
-## 🎯 Who This Is For
+A local Python agent that uses GitHub's API + an MCP-connected LLM to generate repo health reports across three lenses: activity health, PR quality, and bug/issue signals.
 
-- Product Managers evaluating technical tools
-- Founders doing technical due diligence
-- Developers onboarding into unfamiliar codebases
+---
 
-## 💡 Solution
+## Architecture
 
-GitScope helps users quickly evaluate repositories by generating:
+```
+Input: GitHub repo URL + analysis mode (health / PRs / bugs)
+    ↓
+GitHub API → fetch commits, PRs, issues, contributor data
+    ↓
+Chunked context assembly (avoids token limits for large repos)
+    ↓
+MCP-connected LLM (local) → structured prompt per analysis mode
+    ↓
+Output: Executive summary + Key findings + Risk signals + Recommended actions
+```
 
-- executive summaries  
-- key findings  
-- risk signals  
-- recommended actions  
+Key files:
+- `github_agent.py` — core agent logic, API calls, prompt construction
+- `requirements.txt` — dependencies (Python)
 
-## ⚙️ Product Experience
+---
 
-1. Input a GitHub repository
-2. Select analysis mode (health, PRs, bugs)
-3. AI generates structured insights
-4. User makes faster decisions
+## What It Produces
 
-## 🧠 PM Lens
+For each repo, GitScope returns:
 
-This product is designed around one core goal:
+| Section | What It Contains |
+|---|---|
+| Executive Summary | 2–3 sentence repo health verdict |
+| Key Findings | Top 3–5 signals (commit frequency, contributor count, PR merge rate) |
+| Risk Signals | Maintenance gaps, stale issues, single-contributor risk |
+| Recommended Actions | Adopt / Evaluate / Avoid with reasoning |
 
-👉 **Reduce time-to-decision for evaluating repositories**
+---
 
-### Key Questions
-- How quickly can a user understand a repo?
-- What signals matter most?
-- What level of detail is “enough”?
+## How to Use
 
-## 📊 Output Structure
+```bash
+git clone https://github.com/Ruthwik-Data/gitscope
+cd gitscope
+pip install -r requirements.txt
+python github_agent.py --repo https://github.com/owner/repo --mode health
+```
 
-- **Executive Summary** → quick overview  
-- **Key Findings** → important signals  
-- **Risks / Concerns** → potential issues  
-- **Recommended Actions** → next steps  
+Modes: `health` | `prs` | `bugs`
 
-## ⚖️ Key Tradeoffs
+---
 
-- Speed vs depth  
-- Accuracy vs latency  
-- Simplicity vs flexibility  
+## Lessons Learned
 
-## 🚧 Real-World Limitations
+1. **Selective context beats full-repo dumps.** Sending all raw API data exceeded token limits and degraded output quality. Chunking by recency and relevance produced sharper summaries.
 
-During development:
+2. **Mode-specific prompts matter.** A single generic prompt produced mediocre output across all three lenses. Separate prompt templates per mode (health, PRs, bugs) improved specificity significantly.
 
-- GitHub API reliability issues
-- Token limits for large repositories
-- Inconsistent pull request data
+3. **GitHub API inconsistency is a real constraint.** PR data is unreliable for repos that close issues externally or use squash merges. Any metric built on PR count alone will mislead.
 
-## 💡 Product Insight
+---
 
-Naive approach:
-- sending entire repo → fails (token limits)
+## Known Limitations
 
-Better approach:
-- chunking
-- summarization
-- selective context
+- No quantitative benchmark yet — output quality is assessed manually, not with a formal eval
+- GitHub API rate limits constrain analysis of very active repos (5000 req/hr)
+- Does not yet analyze file-level code quality or test coverage
+- LLM outputs vary run-to-run without temperature pinning; reproducibility is limited
+- No caching — repeated analysis of the same repo re-fetches all data
 
-## 🔮 Future Improvements
+---
 
-- file-level analysis
-- embeddings-based retrieval
-- retry + caching mechanisms
-- deeper code reasoning
+## Why This Exists
 
-## 🧠 Product Perspective
+Built as a personal productivity tool during AI stack evaluation sprints — when I needed to assess 10+ repos in a day and wanted structured, comparable output rather than ad hoc notes.
 
-My contribution was focused on the product layer:
-- identifying the core user problem (repo evaluation)
-- designing outputs for decision-making
-- defining key metrics and tradeoffs
-- analyzing real-world constraints (API limits, token usage
-
-## 🙏 Credits
-Adapted from the open-source repository:
-- https://github.com/Shubhamsaboo/awesome-llm-apps
+The evaluation gap it exposes: most AI developer tools optimize for code generation, not repo comprehension. This is a small step toward AI-assisted technical due diligence.
