@@ -90,4 +90,5 @@ Built as a personal productivity tool during AI stack evaluation sprints — whe
 
 The evaluation gap it exposes: most AI developer tools optimize for code generation, not repo comprehension. This is a small step toward AI-assisted technical due diligence.
 
-# adapted from - https://github.com/Shubhamsaboo/awesome-llm-apps
+# adapted 
+from - https://github.com/Shubhamsaboo/awesome-llm-apps
