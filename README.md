@@ -89,3 +89,5 @@ Modes: `health` | `prs` | `bugs`
 Built as a personal productivity tool during AI stack evaluation sprints — when I needed to assess 10+ repos in a day and wanted structured, comparable output rather than ad hoc notes.
 
 The evaluation gap it exposes: most AI developer tools optimize for code generation, not repo comprehension. This is a small step toward AI-assisted technical due diligence.
+
+# adapted from - https://github.com/Shubhamsaboo/awesome-llm-apps
